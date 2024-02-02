@@ -1,0 +1,4 @@
+1. เข้าไปที่ path 01-data-model
+2. เปิด terminal ใหม่
+3. พิม python create_tables.python
+4. พิม python etl.py
