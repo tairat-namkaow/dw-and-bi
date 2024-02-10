@@ -6,9 +6,11 @@ from typing import List
 from cassandra.cluster import Cluster
 
 
-table_drop = "DROP TABLE events"
+table_events_drop = "DROP TABLE events"
+table_actors_drop = "DROP TABLE actors"
+table_repos_drop = "DROP TABLE repos"
 
-table_create = """
+table_create_events = """
     CREATE TABLE IF NOT EXISTS events
     (
         id text,
@@ -20,12 +22,38 @@ table_create = """
         )
     )
 """
+table_create_actors = """
+    CREATE TABLE IF NOT EXISTS actors
+    (
+        id text,
+        login text,
+        public boolean,
+        PRIMARY KEY (
+            id
+        )
+    )
+"""
+table_create_repos = """
+    CREATE TABLE IF NOT EXISTS repos
+    (
+        id text,
+        type text,
+        public boolean,
+        PRIMARY KEY (
+            id
+        )
+    )
+"""
 
 create_table_queries = [
-    table_create,
+    table_create_events,
+    table_create_actors,
+    table_create_repos
 ]
 drop_table_queries = [
-    table_drop,
+    table_events_drop,
+    table_actors_drop,
+    table_repos_drop
 ]
 
 def drop_tables(session):

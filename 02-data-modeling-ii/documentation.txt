@@ -1,0 +1,47 @@
+สร้างฟังชั่น drop และ create ตาราง actors และ repos เพิ่มขึ้นมา
+
+table_create_events = """
+    CREATE TABLE IF NOT EXISTS events
+    (
+        id text,
+        type text,
+        public boolean,
+        PRIMARY KEY (
+            id,
+            type
+        )
+    )
+"""
+table_create_actors = """
+    CREATE TABLE IF NOT EXISTS actors
+    (
+        id text,
+        login text,
+        public boolean,
+        PRIMARY KEY (
+            id
+        )
+    )
+"""
+table_create_repos = """
+    CREATE TABLE IF NOT EXISTS repos
+    (
+        id text,
+        type text,
+        public boolean,
+        PRIMARY KEY (
+            id
+        )
+    )
+"""
+
+create_table_queries = [
+    table_create_events,
+    table_create_actors,
+    table_create_repos
+]
+drop_table_queries = [
+    table_events_drop,
+    table_actors_drop,
+    table_repos_drop
+]
