@@ -1,0 +1,2 @@
+[console_scripts]
+cqlsh = cqlsh.__main__:main

@@ -101,7 +101,22 @@ def process(session, filepath):
                 print(each["id"], each["type"], each["actor"]["login"])
 
                 # Insert data into tables here
-
+                query = f"""
+                   INSERT INTO events (
+                        id,
+                        type,
+                        actor_id,
+                        actor_login,
+                        repo_id,
+                        repo_name,
+                        created_at,
+                        public) 
+                    VALUES ('{each["id"]}', '{each["type"]}', 
+                            '{each["actor"]["id"]}','{each["actor"]["login"]}',
+                            '{each["repo"]["id"]}', '{each["repo"]["name"]}', 
+                            '{each["created_at"]}',{each["public"]})
+                """
+                session.execute(query)
 
 def insert_sample_data(session):
     query = f"""
@@ -139,7 +154,7 @@ def main():
 
     # Select data in Cassandra and print them to stdout
     query = """
-    SELECT * from events WHERE id = '23487929637' AND type = 'IssueCommentEvent'
+    SELECT * from events;
     """
     try:
         rows = session.execute(query)
