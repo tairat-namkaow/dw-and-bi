@@ -45,3 +45,29 @@ drop_table_queries = [
     table_actors_drop,
     table_repos_drop
 ]
+
+หลังจากสร้างเรียบร้อยแล้วเพิ่มข้อมูล
+
+INSERT INTO events (
+                id,
+                type,
+                actor_id,
+                actor_login,
+                repo_id,
+                repo_name,
+                created_at,
+                public) 
+            VALUES ('{each["id"]}', '{each["type"]}', 
+                    '{each["actor"]["id"]}','{each["actor"]["login"]}',
+                    '{each["repo"]["id"]}', '{each["repo"]["name"]}', 
+                    '{each["created_at"]}',{each["public"]})
+        """
+        session.execute(query)
+
+หลังจากสร้างและเพิ่มข้อมูลแล้ว
+1. พิมพ์ docker compose up
+2. cd เข้าไปที่ 02-data-modeling-ii
+3. พิมพ์ source ENV/bin/activate
+4. พิมพ์ python etl.py
+5. พิมพ์ cqlsh
+6. select * from github_events.events ;

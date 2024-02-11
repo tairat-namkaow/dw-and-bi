@@ -5,23 +5,10 @@ from typing import List
 
 from cassandra.cluster import Cluster
 
+table_drop_actors = "DROP TABLE IF EXISTS actors"
+table_drop_repos = "DROP TABLE IF EXISTS repos"
+table_drop_events = "DROP TABLE IF EXISTS events"
 
-table_events_drop = "DROP TABLE events"
-table_actors_drop = "DROP TABLE actors"
-table_repos_drop = "DROP TABLE repos"
-
-table_create_events = """
-    CREATE TABLE IF NOT EXISTS events
-    (
-        id text,
-        type text,
-        public boolean,
-        PRIMARY KEY (
-            id,
-            type
-        )
-    )
-"""
 table_create_actors = """
     CREATE TABLE IF NOT EXISTS actors
     (
@@ -33,8 +20,9 @@ table_create_actors = """
         )
     )
 """
+
 table_create_repos = """
-    CREATE TABLE IF NOT EXISTS repos
+    CREATE TABLE IF NOT EXISTS repo
     (
         id text,
         type text,
@@ -44,16 +32,33 @@ table_create_repos = """
         )
     )
 """
+table_create_events = """
+    CREATE TABLE IF NOT EXISTS events
+    (
+        id text,
+        type text,
+        actor_id text,
+        actor_login text,
+        repo_id text,
+        repo_name text,
+        created_at timestamp,
+        public boolean,
+        PRIMARY KEY (
+            id,
+            type
+        )
+    )
+"""
 
 create_table_queries = [
-    table_create_events,
     table_create_actors,
-    table_create_repos
+    table_create_repos,
+    table_create_events
 ]
 drop_table_queries = [
-    table_events_drop,
-    table_actors_drop,
-    table_repos_drop
+    table_drop_actors,
+    table_drop_repos,
+    table_drop_events,
 ]
 
 def drop_tables(session):
@@ -100,7 +105,7 @@ def process(session, filepath):
                 # Print some sample data
                 print(each["id"], each["type"], each["actor"]["login"])
 
-                # Insert data into tables here
+                #Insert data into tables here
                 query = f"""
                    INSERT INTO events (
                         id,
@@ -149,12 +154,10 @@ def main():
     drop_tables(session)
     create_tables(session)
 
-    # process(session, filepath="../data")
-    insert_sample_data(session)
+    process(session, filepath="../data")
 
-    # Select data in Cassandra and print them to stdout
     query = """
-    SELECT * from events;
+    SELECT * from events
     """
     try:
         rows = session.execute(query)
